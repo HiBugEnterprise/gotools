@@ -31,10 +31,9 @@ func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err 
 		appType  string
 	)
 
-	var errCustom *errorx.Error
+	var customErr *errorx.Error
 	switch {
-	case errors.As(err, &errCustom):
-		customErr := errorx.From(err)
+	case errors.As(err, &customErr):
 		res.Code = customErr.Code
 		res.Msg = customErr.Msg
 		code = customErr.Code

@@ -1,6 +1,7 @@
 package errorx
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -60,9 +61,12 @@ func From(err error) *Error {
 	if err == nil {
 		return nil
 	}
-	if inErr, ok := err.(*Error); ok {
-		return inErr
+
+	var customErr *Error
+	if errors.As(err, &customErr) {
+		return customErr
 	}
+
 	return Internal(err, CodeInternalErr.Msg())
 }
 
@@ -70,6 +74,7 @@ func (e *Error) Error() string {
 	if e.Err != nil {
 		return e.Msg + ": " + e.Err.Error()
 	}
+
 	return e.Msg
 }
 
