@@ -2,6 +2,7 @@ package httpc
 
 import (
 	"context"
+	"errors"
 	"github.com/HiBugEnterprise/gotools/errorx"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -29,8 +30,10 @@ func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err 
 		metadata any
 		appType  string
 	)
-	switch err.(type) {
-	case *errorx.Error:
+
+	var errCustom *errorx.Error
+	switch {
+	case errors.As(err, &errCustom):
 		customErr := errorx.From(err)
 		res.Code = customErr.Code
 		res.Msg = customErr.Msg
