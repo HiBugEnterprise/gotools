@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -12,14 +13,14 @@ import (
 func TestCreateStreamChat_WithEmptyURL(t *testing.T) {
 	server := httptest.NewRecorder()
 
-	_, err := CreateStreamChat(server, "", nil)
+	_, err := CreateStreamChat(context.Background(), server, "", nil)
 	assert.Equal(t, errors.New("url is empty"), err)
 }
 
 func TestCreateStreamChat_WithInvalidURL(t *testing.T) {
 	server := httptest.NewRecorder()
 
-	_, err := CreateStreamChat(server, "ht2sd:123", nil)
+	_, err := CreateStreamChat(context.Background(), server, "ht2sd:123", nil)
 	assert.NotNil(t, err)
 }
 
@@ -27,7 +28,7 @@ func TestCreateStreamChat_Normal(t *testing.T) {
 
 	mockServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		url := "http://127.0.0.1:8080/api/chat"
-		answer, err := CreateStreamChat(w, url, nil)
+		answer, err := CreateStreamChat(context.Background(), w, url, nil)
 
 		assert.NotEmpty(t, answer)
 		assert.Nil(t, err)
@@ -47,7 +48,7 @@ func TestCreateStreamChat_WithError(t *testing.T) {
 	defer mockServer.Close()
 
 	server := httptest.NewRecorder()
-	answer, err := CreateStreamChat(server, mockServer.URL, nil)
+	answer, err := CreateStreamChat(context.Background(), server, mockServer.URL, nil)
 	assert.Empty(t, answer)
 	assert.NotNil(t, err)
 }

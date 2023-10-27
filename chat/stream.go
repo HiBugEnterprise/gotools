@@ -3,10 +3,10 @@ package chat
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"github.com/HiBugEnterprise/gotools/errorx"
-	"github.com/HiBugEnterprise/gotools/httpc"
 	jsonx "github.com/HiBugEnterprise/gotools/jsonc"
 	"io"
 	"net/http"
@@ -19,29 +19,58 @@ type AnswerDTO struct {
 	Response string `json:"response"`
 }
 
-func CreateStreamChat(w http.ResponseWriter, reqURL string, data any) (answer string, err error) {
+func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data any) (answer string, err error) {
 	if reqURL == "" {
 		return "", errors.New("url is empty")
 	}
+
 	if _, err = url.Parse(reqURL); err != nil {
 		return "", errorx.Internal(err, "%s is an invalid URL", reqURL)
 	}
 
-	res, err := httpc.Post(reqURL, httpc.SetBody(data))
+	llmResp, err := sentHttpReqToModel(ctx, reqURL, data)
 	if err != nil {
 		return
 	}
+	defer llmResp.Body.Close()
 	setSSEHeader(w)
-	reader := bufio.NewReader(res.RawBody())
+
+	return sentModelSSEResp(w, llmResp)
+}
+
+func sentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (resp *http.Response, err error) {
+	reqBodyBytes, err := jsonx.Marshal(requestBody)
+	if err != nil {
+		err = errorx.Internal(err, "序列化请求数据异常").WithMetadata(errorx.Metadata{"req": requestBody})
+		return
+	}
+	reqBodyBuff := bytes.NewBuffer(reqBodyBytes)
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, reqURL, reqBodyBuff)
+	if err != nil {
+		err = errorx.Internal(err, "创建http请求异常")
+		return
+	}
+
+	httpReq.Header.Set("Content-Type", "application/json")
+
+	cli := http.Client{}
+	if resp, err = cli.Do(httpReq); err != nil {
+		return
+	}
+
+	return
+}
+
+func sentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer string, err error) {
+	reader := bufio.NewReader(sseResp.Body)
 
 	headerData := []byte("data: ")
 	flusher, ok := w.(http.Flusher)
 	if !ok {
-
 		return "", errors.New("not support http flusher")
 	}
-	var lastAns []byte
 
+	var lastAns []byte
 	for {
 		var line []byte
 		if line, err = reader.ReadBytes('\n'); err != nil {
