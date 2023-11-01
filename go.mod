@@ -6,9 +6,11 @@ require (
 	github.com/bytedance/sonic v1.10.2
 	github.com/go-resty/resty/v2 v2.10.0
 	github.com/kakuilan/kgo v0.4.6
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
 	github.com/zeromicro/go-zero v1.5.6
 	golang.org/x/crypto v0.14.0
+	google.golang.org/grpc v1.58.2
 	k8s.io/apimachinery v0.27.0-alpha.3
 )
 
@@ -40,7 +42,6 @@ require (
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230913181813-007df8e322eb // indirect
-	google.golang.org/grpc v1.58.2 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
