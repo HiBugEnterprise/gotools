@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/HiBugEnterprise/gotools/errorx"
 	"github.com/zeromicro/go-zero/core/logc"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 )
@@ -23,7 +24,7 @@ func RespSuccess(ctx context.Context, w http.ResponseWriter, resp interface{}) {
 	httpx.OkJsonCtx(ctx, w, body)
 }
 
-func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
+func RespError(lg logx.Logger, w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		code     = http.StatusInternalServerError
 		res      = Response{Code: code, Msg: "服务繁忙，稍后再试"}
@@ -41,7 +42,7 @@ func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err 
 		metadata = customErr.Metadata
 	}
 
-	logc.Errorw(ctx, res.Msg,
+	lg.Errorw(res.Msg,
 		logc.Field("err", err),
 		logc.Field("code", code),
 		logc.Field("type", appType),
@@ -50,7 +51,7 @@ func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err 
 		logc.Field("path", r.URL.Path),
 	)
 
-	httpx.OkJsonCtx(ctx, w, res)
+	httpx.OkJsonCtx(r.Context(), w, res)
 }
 
 func JwtUnauthorizedResult(w http.ResponseWriter, r *http.Request, err error) {
