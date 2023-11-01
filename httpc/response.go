@@ -26,7 +26,7 @@ func RespSuccess(ctx context.Context, w http.ResponseWriter, resp interface{}) {
 func RespError(ctx context.Context, w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		code     = http.StatusInternalServerError
-		res      = Response{Code: code, Msg: "服务器开小差啦，稍后再来试一试"}
+		res      = Response{Code: code, Msg: "服务繁忙，稍后再试"}
 		metadata any
 		appType  string
 	)

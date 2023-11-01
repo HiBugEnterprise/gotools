@@ -7,7 +7,7 @@ import (
 )
 
 type Error struct {
-	BizType  string `json:"type"`
+	BizType  string `json:"biz_type"`
 	Code     int    `json:"code"`
 	Msg      string `json:"msg"`
 	Metadata Metadata
