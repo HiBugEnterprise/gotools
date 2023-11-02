@@ -28,7 +28,7 @@ func RespError(w http.ResponseWriter, r *http.Request, err error) {
 		code     = http.StatusInternalServerError
 		res      = Response{Code: code, Msg: errorx.CodeInternalErr.Msg()}
 		metadata any
-		appType  string
+		bizType  string
 	)
 
 	var customErr *errorx.Error
@@ -37,14 +37,14 @@ func RespError(w http.ResponseWriter, r *http.Request, err error) {
 		res.Code = customErr.Code
 		res.Msg = customErr.Msg
 		code = customErr.Code
-		appType = customErr.BizType
+		bizType = customErr.BizType
 		metadata = customErr.Metadata
 	}
 
 	logc.Errorw(r.Context(), res.Msg,
 		logc.Field("err", err),
 		logc.Field("code", code),
-		logc.Field("type", appType),
+		logc.Field("type", bizType),
 		logc.Field("metadata", metadata),
 		logc.Field("method", r.Method),
 		logc.Field("path", r.URL.Path),
