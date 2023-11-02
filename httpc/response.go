@@ -18,7 +18,7 @@ type Response struct {
 func RespSuccess(ctx context.Context, w http.ResponseWriter, resp interface{}) {
 	var body Response
 	body.Code = http.StatusOK
-	body.Msg = "success"
+	body.Msg = errorx.CodeSuccess.Msg()
 	body.Data = resp
 	httpx.OkJsonCtx(ctx, w, body)
 }
@@ -26,7 +26,7 @@ func RespSuccess(ctx context.Context, w http.ResponseWriter, resp interface{}) {
 func RespError(w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		code     = http.StatusInternalServerError
-		res      = Response{Code: code, Msg: "服务繁忙，稍后再试"}
+		res      = Response{Code: code, Msg: errorx.CodeInternalErr.Msg()}
 		metadata any
 		appType  string
 	)

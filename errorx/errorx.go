@@ -16,22 +16,17 @@ type Error struct {
 
 type Metadata map[string]any
 
-func New(t string, code int, message string) *Error {
+// New 创建自定义错误, 通常用于业务并没有err返回, 但是属于业务逻辑错误. 此时需要给前端一个友好提示
+// eg: New("user-service-Login", 404001, "用户不存在")
+func New(bizType string, code int, message string) *Error {
 	return &Error{
-		BizType: t,
+		BizType: bizType,
 		Code:    code,
 		Msg:     message,
 	}
 }
 
-func WithCode(t string, code ResCode) *Error {
-	return &Error{
-		BizType: t,
-		Code:    int(code),
-		Msg:     code.Msg(),
-	}
-}
-
+// Internal 创建内部错误, 通常用于服务端内部错误, 如数据库, 缓存等
 func Internal(err error, format string, args ...any) *Error {
 	message := fmt.Sprintf(format, args...)
 	return New(http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError, message).WithError(err)
