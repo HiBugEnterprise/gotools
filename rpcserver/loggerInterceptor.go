@@ -15,7 +15,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 
 	if err != nil {
 		var customErr *errorx.Error
-		if errors.As(err, customErr) { //自定义错误类型
+		if errors.As(err, &customErr) { //自定义错误类型
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
 			//转成grpc err
 			err = status.Error(codes.Code(customErr.Code), customErr.Msg)
