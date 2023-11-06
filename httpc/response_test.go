@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestReponse(t *testing.T) {
+func TestResponse(t *testing.T) {
 	err := errorx.New("test", int(errorx.CodeInternalErr), "test")
 
 	RespError(nil, nil, err)
