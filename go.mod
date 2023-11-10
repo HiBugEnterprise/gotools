@@ -3,6 +3,7 @@ module github.com/HiBugEnterprise/gotools
 go 1.21.0
 
 require (
+	github.com/PandaXGO/PandaKit v0.0.0-20231014010146-3a169666cab5
 	github.com/bytedance/sonic v1.10.2
 	github.com/go-resty/resty/v2 v2.10.0
 	github.com/kakuilan/kgo v0.4.6
