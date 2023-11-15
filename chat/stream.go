@@ -28,17 +28,17 @@ func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string,
 		return "", errorx.Internal(err, "%s is an invalid URL", reqURL)
 	}
 
-	llmResp, err := sentHttpReqToModel(ctx, reqURL, data)
+	llmResp, err := SentHttpReqToModel(ctx, reqURL, data)
 	if err != nil {
 		return
 	}
 	defer llmResp.Body.Close()
-	setSSEHeader(w)
+	SetSSEHeader(w)
 
-	return sentModelSSEResp(w, llmResp)
+	return SentModelSSEResp(w, llmResp)
 }
 
-func sentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (resp *http.Response, err error) {
+func SentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (resp *http.Response, err error) {
 	reqBodyBytes, err := jsonx.Marshal(requestBody)
 	if err != nil {
 		err = errorx.Internal(err, "序列化请求数据异常").WithMetadata(errorx.Metadata{"req": requestBody})
@@ -61,7 +61,7 @@ func sentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (re
 	return
 }
 
-func sentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer string, err error) {
+func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer string, err error) {
 	reader := bufio.NewReader(sseResp.Body)
 
 	headerData := []byte("data: ")
@@ -118,7 +118,7 @@ func sentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer str
 	return
 }
 
-func setSSEHeader(w http.ResponseWriter) {
+func SetSSEHeader(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/event-stream")
 	w.Header().Set("Cache-Control", "no-cache")
 	w.Header().Set("Connection", "keep-alive")
