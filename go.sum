@@ -1,3 +1,5 @@
+github.com/PandaXGO/PandaKit v0.0.0-20231014010146-3a169666cab5 h1:vV2y9A70rSAdVNB+moACcYf9Q9dup3bz9KZgH07iFiU=
+github.com/PandaXGO/PandaKit v0.0.0-20231014010146-3a169666cab5/go.mod h1:VsTIkY1oxUoOoady/U6evOB24BHhv2O7ELH4WukqIXo=
 github.com/brianvoe/gofakeit/v6 v6.16.0 h1:EelCqtfArd8ppJ0z+TpOxXH8sVWNPBadPNdCDSMMw7k=
 github.com/brianvoe/gofakeit/v6 v6.16.0/go.mod h1:Ow6qC71xtwm79anlwKRlWZW6zVq9D2XHE4QSSMP/rU8=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
