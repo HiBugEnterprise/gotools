@@ -1,4 +1,4 @@
-package jsonx
+package jsonc
 
 import (
 	"errors"

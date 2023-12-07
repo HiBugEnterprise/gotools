@@ -3,8 +3,8 @@ package ips
 import (
 	"errors"
 	"fmt"
-	"github.com/PandaXGO/PandaKit/httpclient"
-
+	"github.com/HiBugEnterprise/gotools/httpc"
+	"github.com/HiBugEnterprise/gotools/jsonc"
 	"net"
 	"net/http"
 	"strings"
@@ -51,13 +51,19 @@ func GetRealAddressByIP(ip string) string {
 		return "内部IP"
 	}
 	url := fmt.Sprintf("%s?ip=%s&type=1", ipurl, ip)
-	res := httpclient.NewRequest(url).Get()
-	if res == nil || res.StatusCode != 200 {
-		return UNKNOWN
-	}
-	toMap, err := res.BodyToMap()
+	httpResp, err := httpc.Get(url)
 	if err != nil {
 		return UNKNOWN
 	}
-	return toMap["address"].(string)
+
+	if httpResp == nil || httpResp.StatusCode() != 200 {
+		return UNKNOWN
+	}
+
+	var res map[string]any
+	if err = jsonc.Unmarshal(httpResp.Body(), &res); err != nil {
+		return UNKNOWN
+	}
+
+	return res["address"].(string)
 }
