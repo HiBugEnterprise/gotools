@@ -67,7 +67,7 @@ func From(err error) *Error {
 
 func (e *Error) Error() string {
 	if e.Err != nil {
-		return e.Msg + ": " + e.Err.Error()
+		return e.Err.Error()
 	}
 
 	return e.Msg
