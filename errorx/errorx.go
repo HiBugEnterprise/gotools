@@ -91,3 +91,7 @@ func (e *Error) WithError(err error) *Error {
 	e.Err = err
 	return e
 }
+
+func IsNotFound(err error) bool {
+	return From(err).Code == http.StatusNotFound
+}
