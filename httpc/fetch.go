@@ -68,7 +68,7 @@ func Fetch(c *FetchConf) (contents []byte, err error) {
 		}()
 
 		if contents, err = io.ReadAll(resp.Body); err != nil {
-			return errorx.Internal(err, "读取HTTP响应异常").WithMetadata(errorx.Metadata{"req": c})
+			return err
 		}
 
 		return nil
@@ -87,15 +87,11 @@ func FormFetch(c *FetchConf) (contents []byte, err error) {
 	err = retry.Do(func() error {
 		strData, ok := c.Data.(string)
 		if !ok {
-			return errorx.BadRequest("请求参数类型异常").
-				WithMetadata(errorx.Metadata{"data:": c.Data}).
-				WithError(err)
+			return err
 		}
 		request, err := http.NewRequest(c.Method, c.URL, strings.NewReader(strData))
 		if err != nil {
-			return errorx.BadRequest("创建HTTP请求异常").
-				WithMetadata(errorx.Metadata{"req": c}).
-				WithError(err)
+			return err
 		}
 
 		request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
@@ -125,7 +121,7 @@ func FormFetch(c *FetchConf) (contents []byte, err error) {
 		}()
 
 		if contents, err = io.ReadAll(resp.Body); err != nil {
-			return errorx.Internal(err, "读取HTTP响应异常").WithMetadata(errorx.Metadata{"req": c})
+			return err
 		}
 
 		return nil

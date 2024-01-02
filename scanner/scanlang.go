@@ -2,26 +2,25 @@ package scanner
 
 import (
 	"encoding/json"
-	"github.com/HiBugEnterprise/gotools/errorx"
 	"github.com/HiBugEnterprise/gotools/jsonc"
 	"os/exec"
 )
 
 type LangStatHeader struct {
-	ClocUrl        string  `json:"cloc_url"`
-	ClocVersion    string  `json:"cloc_version"`
-	ElapsedSeconds float64 `json:"elapsed_seconds"`
-	NFiles         uint32  `json:"n_files"`
-	NLines         uint32  `json:"n_lines"`
-	FilesPerSecond float64 `json:"files_per_second"`
-	LinesPerSecond float64 `json:"lines_per_second"`
+	ClocUrl        string  `json:"cloc_url"`         // cloc的GitHub地址
+	ClocVersion    string  `json:"cloc_version"`     //版本
+	ElapsedSeconds float64 `json:"elapsed_seconds"`  //扫描所用的时间（秒）
+	NFiles         uint32  `json:"n_files"`          //扫描的文件总数
+	NLines         uint32  `json:"n_lines"`          //扫描的行数总数
+	FilesPerSecond float64 `json:"files_per_second"` //每秒扫描文件的数目
+	LinesPerSecond float64 `json:"lines_per_second"` //每秒扫描行的数目
 }
 
 type LanguageStat struct {
-	NFiles  uint32 `json:"nFiles"`
-	Blank   uint32 `json:"blank"`
-	Comment uint32 `json:"comment"`
-	Code    uint32 `json:"code"`
+	NFiles  uint32 `json:"nFiles"`  //使用该编程语言编写的文件数
+	Blank   uint32 `json:"blank"`   //该编程语言的空行数
+	Comment uint32 `json:"comment"` //该编程语言的注释行数
+	Code    uint32 `json:"code"`    //该编程语言的代码行数
 }
 
 type ProjectLangStat struct {
@@ -34,13 +33,11 @@ func ScanLanguage(filePath string) (*ProjectLangStat, error) {
 	cmd.Dir = filePath
 	output, err := cmd.Output()
 	if err != nil {
-		err = errorx.Internal(err, "扫描项目出错")
 		return nil, err
 	}
 
 	resp := &ProjectLangStat{}
 	if err = ParseProjectLangStat(output, resp); err != nil {
-		err = errorx.Internal(err, "反序列化编程语言统计数据出错")
 		return nil, err
 	}
 	return resp, nil

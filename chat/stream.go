@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/HiBugEnterprise/gotools/errorx"
 	jsonx "github.com/HiBugEnterprise/gotools/jsonc"
 	"io"
 	"net/http"
@@ -25,7 +24,7 @@ func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string,
 	}
 
 	if _, err = url.Parse(reqURL); err != nil {
-		return "", errorx.Internal(err, "%s is an invalid URL", reqURL)
+		return
 	}
 
 	llmResp, err := SentHttpReqToModel(ctx, reqURL, data)
@@ -41,13 +40,11 @@ func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string,
 func SentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (resp *http.Response, err error) {
 	reqBodyBytes, err := jsonx.Marshal(requestBody)
 	if err != nil {
-		err = errorx.Internal(err, "序列化请求数据异常").WithMetadata(errorx.Metadata{"req": requestBody})
 		return
 	}
 	reqBodyBuff := bytes.NewBuffer(reqBodyBytes)
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, reqURL, reqBodyBuff)
 	if err != nil {
-		err = errorx.Internal(err, "创建http请求异常")
 		return
 	}
 
@@ -97,8 +94,7 @@ func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer str
 		}
 		_, err = fmt.Fprintf(w, "data: %v\n\n", strData)
 		if err != nil {
-
-			return "", errorx.Internal(err, "model response sent to http failed")
+			return
 		}
 
 		flusher.Flush()
@@ -110,7 +106,7 @@ func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer str
 	}
 
 	if answerDTO.Code != http.StatusOK {
-		return "", errorx.Internal(err, "model response failed")
+		return
 	}
 
 	answer = answerDTO.Response
