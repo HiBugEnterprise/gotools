@@ -93,5 +93,8 @@ func (e *Error) WithError(err error) *Error {
 }
 
 func IsNotFound(err error) bool {
+	if err == nil {
+		return false
+	}
 	return From(err).Code == http.StatusNotFound
 }
