@@ -7,11 +7,12 @@ import (
 )
 
 type Error struct {
-	BizType  string `json:"biz_type"`
-	Code     int    `json:"code"`
-	Msg      string `json:"msg"`
-	Metadata Metadata
-	Err      error
+	BizType  string   `json:"biz_type"` // 业务类型
+	Code     int      `json:"code"`     // 错误码
+	Msg      string   `json:"msg"`      // 错误信息
+	Metadata Metadata // 元数据
+	IsShow   bool     // 是否需要展示给用户
+	Err      error    // 原始错误
 }
 
 type Metadata map[string]any
@@ -91,6 +92,12 @@ func (e *Error) WithError(err error) *Error {
 	e.Err = err
 	return e
 }
+
+func (e *Error) Show() *Error {
+	e.IsShow = true
+	return e
+}
+
 
 func IsNotFound(err error) bool {
 	if err == nil {

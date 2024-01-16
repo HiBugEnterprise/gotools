@@ -25,23 +25,27 @@ func RespSuccess(ctx context.Context, w http.ResponseWriter, resp interface{}) {
 
 func RespError(w http.ResponseWriter, r *http.Request, err error) {
 	var (
-		code     = http.StatusInternalServerError
-		res      = Response{Code: code, Msg: errorx.CodeInternalErr.Msg()}
-		metadata any
-		bizType  string
+		code      = http.StatusInternalServerError
+		res       = Response{Code: code, Msg: errorx.CodeInternalErr.Msg()}
+		metadata  any
+		bizType   string
+		errDetail string
 	)
 
 	var customErr *errorx.Error
 	switch {
 	case errors.As(err, &customErr):
 		res.Code = customErr.Code
-		res.Msg = customErr.Msg
+		errDetail = customErr.Msg
+		if customErr.IsShow {
+			res.Msg = customErr.Msg
+		}
 		code = customErr.Code
 		bizType = customErr.BizType
 		metadata = customErr.Metadata
 	}
 
-	logc.Errorw(r.Context(), res.Msg,
+	logc.Errorw(r.Context(), errDetail,
 		logc.Field("err", err),
 		logc.Field("code", code),
 		logc.Field("type", bizType),
