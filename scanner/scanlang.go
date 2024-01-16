@@ -17,10 +17,10 @@ type LangStatHeader struct {
 }
 
 type LanguageStat struct {
-	NFiles  uint32 `json:"nFiles"`  //使用该编程语言编写的文件数
-	Blank   uint32 `json:"blank"`   //该编程语言的空行数
-	Comment uint32 `json:"comment"` //该编程语言的注释行数
-	Code    uint32 `json:"code"`    //该编程语言的代码行数
+	NFiles  uint32 `json:"nFiles"`  // 使用该编程语言编写的文件数
+	Blank   uint32 `json:"blank"`   // 该编程语言的空行数
+	Comment uint32 `json:"comment"` // 该编程语言的注释行数
+	Code    uint32 `json:"code"`    // 该编程语言的代码行数
 }
 
 type ProjectLangStat struct {
