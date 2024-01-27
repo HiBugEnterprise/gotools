@@ -33,7 +33,7 @@ func TestCreateStreamChat_Normal(t *testing.T) {
 		assert.NotEmpty(t, answer)
 		assert.Nil(t, err)
 
-		w.Write([]byte("data: answer: " + answer + "\n"))
+		w.Write([]byte("data: answer: " + answer.Response + "\n"))
 		t.Log("answer: ", answer)
 	}))
 	defer mockServer.Close()

@@ -68,3 +68,15 @@ func SetFormData(data map[string]string) RequestFunc {
 		r.SetFormData(data)
 	}
 }
+
+func SetPathParam(param, value string) RequestFunc {
+	return func(r *resty.Request) {
+		r.SetPathParam(param, value)
+	}
+}
+
+func SetPathParams(params map[string]string) RequestFunc {
+	return func(r *resty.Request) {
+		r.SetPathParams(params)
+	}
+}

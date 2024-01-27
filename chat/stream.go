@@ -13,14 +13,15 @@ import (
 	"regexp"
 )
 
-type AnswerDTO struct {
+type Answer struct {
 	Code     int    `json:"code"`
 	Response string `json:"response"`
+	Tokens   int64  `json:"tokens"`
 }
 
-func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data any) (answer string, err error) {
+func CreateStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data any) (answer Answer, err error) {
 	if reqURL == "" {
-		return "", errors.New("url is empty")
+		return Answer{}, errors.New("url is empty")
 	}
 
 	if _, err = url.Parse(reqURL); err != nil {
@@ -58,13 +59,12 @@ func SentHttpReqToModel(ctx context.Context, reqURL string, requestBody any) (re
 	return
 }
 
-func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer string, err error) {
+func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer Answer, err error) {
 	reader := bufio.NewReader(sseResp.Body)
-
 	headerData := []byte("data: ")
 	flusher, ok := w.(http.Flusher)
 	if !ok {
-		return "", errors.New("not support http flusher")
+		return Answer{}, errors.New("not support http flusher")
 	}
 
 	var lastAns []byte
@@ -100,7 +100,7 @@ func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer str
 		flusher.Flush()
 	}
 
-	var answerDTO AnswerDTO
+	var answerDTO Answer
 	if err = jsonx.Unmarshal(lastAns, &answerDTO); err != nil {
 		return
 	}
@@ -109,9 +109,7 @@ func SentModelSSEResp(w http.ResponseWriter, sseResp *http.Response) (answer str
 		return
 	}
 
-	answer = answerDTO.Response
-
-	return
+	return answerDTO, nil
 }
 
 func SetSSEHeader(w http.ResponseWriter) {
