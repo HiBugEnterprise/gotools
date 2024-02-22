@@ -1,6 +1,7 @@
 package httpc
 
 import (
+	"io"
 	"net/http"
 	"net/url"
 
@@ -30,6 +31,12 @@ func SetHeader(header, value string) RequestFunc {
 func SetHeaders(headers map[string]string) RequestFunc {
 	return func(r *resty.Request) {
 		r.SetHeaders(headers)
+	}
+}
+
+func SetFileReader(param, fileName string, reader io.Reader) RequestFunc {
+	return func(r *resty.Request) {
+		r.SetFileReader(param, fileName, reader)
 	}
 }
 
