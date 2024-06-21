@@ -15,40 +15,39 @@ import (
 	"regexp"
 )
 
-func CreateChat(ctx context.Context, w http.ResponseWriter, reqURL string, data *ChatReq) (answer *LLMAnswer, err error) {
-	if data.Stream {
+// CreateChat 使用stream字段判断是否为流式对话，data为http请求体，
+// 模型侧接口统一使用post请求，故使用any类型承接请求体兼容模型侧的不同api
+func CreateChat(ctx context.Context, w http.ResponseWriter, reqURL string, stream bool, data any) (answer *LLMAnswer, err error) {
+	if stream {
 		return StreamChat(ctx, w, reqURL, data)
 	}
-	return NoStreamChat(ctx, w, reqURL, data)
+	return NoStreamChat(reqURL, data)
 }
 
-func NoStreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data *ChatReq) (answer *LLMAnswer, err error) {
+// NoStreamChat 创建非流式回答，data为请求体
+func NoStreamChat(reqURL string, data any) (answer *LLMAnswer, err error) {
 	if reqURL == "" {
 		return nil, errors.New("url is empty")
 	}
 
 	var resp *LLMAnswer
-	if _, err = httpc.Post(reqURL,
+	restyResp, err := httpc.Post(reqURL,
 		httpc.SetBody(data),
-		httpc.SetResult(&resp)); err != nil {
+		httpc.SetResult(&resp))
+	if err != nil {
 		err = errors.Wrap(err, "request llm chat failed")
 		return
 	}
 
-	if resp == nil {
-		err = errors.New("llm return empty answer")
-		return nil, err
-	}
-
 	if resp.Code != 200 {
-		err = errors.Wrap(errors.New(""), "llm return error code")
+		err = errors.Wrap(errors.New(string(restyResp.Body())), "llm return error code")
 		return nil, err
 	}
 
 	return resp, nil
 }
 
-func StreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data *ChatReq) (answer *LLMAnswer, err error) {
+func StreamChat(ctx context.Context, w http.ResponseWriter, reqURL string, data any) (answer *LLMAnswer, err error) {
 	if reqURL == "" {
 		return nil, errors.New("url is empty")
 	}

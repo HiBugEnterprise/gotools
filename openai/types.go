@@ -99,3 +99,27 @@ type ChatReq struct {
 	Stream   bool       `json:"stream"`   // 是否是流式接口
 	Messages []*Message `json:"messages"` // 历史消息
 }
+
+// 教学对话模型结构
+
+type TeachingChatCompletion struct {
+	ID       string        `json:"id"`
+	Name     string        `json:"name"`
+	Model    string        `json:"model"`
+	Stream   bool          `json:"stream"`
+	Messages []*ImgChatMsg `json:"messages"`
+}
+
+type ImageURL struct {
+	URL string `json:"url"`
+}
+type Content struct {
+	Type     string    `json:"type"`
+	Text     string    `json:"text"`
+	ImageURL *ImageURL `json:"image_url,omitempty"`
+}
+
+type ImgChatMsg struct {
+	Role    string     `json:"role"`
+	Content []*Content `json:"content"`
+}
