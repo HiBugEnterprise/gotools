@@ -7,9 +7,19 @@ import (
 )
 
 const (
-	host   = "xxxxxxxxxxxxxxxxxx"
+	host   = "XXXXXXXXXXXXXXXXXXXXXXXX"
 	schema = "http"
 )
+
+func client() *APIClient {
+	newConfiguration := NewConfiguration()
+	newConfiguration.AppId = "XXXXXXXXXXXXXXXXXXXXXX"
+	newConfiguration.AppSecret = "XXXXXXXXXXXXXXXXX"
+	newConfiguration.Host = host
+	newConfiguration.Scheme = schema
+	cli := NewApiClient(newConfiguration)
+	return cli
+}
 
 // TestCreateClient 测试创建客户端
 func TestCreateClient(t *testing.T) {
@@ -31,7 +41,7 @@ func TestPayApi(t *testing.T) {
 	client := NewApiClient(newConfiguration)
 	amount := 4231
 	mchno := "xxxxxxxxxxxx"
-	mchorderno := "asdasd"
+	mchorderno := "xxxxxxxxx"
 	waycode := WxLite
 	currency := "cny"
 	subject := "测试"
@@ -58,21 +68,35 @@ func TestPayApi(t *testing.T) {
 	t.Log(response)
 }
 
+func TestCloseOrder(t *testing.T) {
+	cli := client()
+
+	request := OrderCloseRequest{
+		MchNo:      "XXXXXXXXXXXX",
+		MchOrderNo: "xxxxxxxxx",
+	}
+	execute, _, err := cli.PayApi.CloseOrder(context.Background(), request)
+	if err != nil {
+		t.Log(err)
+		return
+	}
+	if execute.Code != 0 {
+		t.Log(execute.Code, execute.Msg)
+	}
+	t.Log(execute)
+}
 func TestQueryOrder(t *testing.T) {
-	newConfiguration := NewConfiguration()
-	newConfiguration.AppId = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-	newConfiguration.AppSecret = "xxxxxxxxxxxxxxxxxxxxxxxxx"
-	newConfiguration.Host = host
-	newConfiguration.Scheme = schema
-	client := NewApiClient(newConfiguration)
+	cli := client()
 
 	request := PayQueryRequest{
-		MchNo:      Pointer("xxxxxxxxxxx"),
-		MchOrderNo: Pointer("xxxxxxxxxxxxxxxxxx"),
+		MchNo:      Pointer("XXXXXXXXXXXXXXXX"),
+		MchOrderNo: Pointer("xxxxxxxxxxxxxxxx"),
 	}
 
-	execute, _, err := client.PayApi.QueryOrder(context.Background(), request)
+	execute, _, err := cli.PayApi.QueryOrder(context.Background(), request)
 
+	fmt.Printf("%+v\n", execute.Data)
+	fmt.Println(*execute.Data.Amount, *execute.Data.CreatedAt, *execute.Data.State)
 	if err != nil {
 		t.Log(err)
 		return
