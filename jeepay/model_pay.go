@@ -77,7 +77,8 @@ func NewPayModel() *PayCreateRequest {
 }
 
 type OrderCloseRequest struct {
-	PayOrderId string `json:"payOrderId"`
+	// 商户生成的订单
+	MchOrderNo string `json:"mchOrderNo"`
 	AppId      string `json:"appId"`
 	Sign       string `json:"sign"`
 	SignType   string `json:"signType"`

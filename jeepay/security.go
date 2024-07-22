@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -39,10 +40,9 @@ func encrypt(params map[string]interface{}, secret string, securityType string) 
 	var buffer bytes.Buffer
 	for _, item := range keys {
 		value := params[item]
-		if value == nil {
-			continue
-		}
-		if value == "" {
+
+		valRef := reflect.ValueOf(value)
+		if !valRef.IsValid() || valRef.IsZero() {
 			continue
 		}
 		buffer.WriteString(item)

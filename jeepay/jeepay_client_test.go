@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	host   = "xxxxxxxxxxxxxxxxxxx"
+	host   = "xxxxxxxxxxxxxxxxxx"
 	schema = "http"
 )
 
@@ -56,4 +56,28 @@ func TestPayApi(t *testing.T) {
 	}
 	t.Log(execute)
 	t.Log(response)
+}
+
+func TestQueryOrder(t *testing.T) {
+	newConfiguration := NewConfiguration()
+	newConfiguration.AppId = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+	newConfiguration.AppSecret = "xxxxxxxxxxxxxxxxxxxxxxxxx"
+	newConfiguration.Host = host
+	newConfiguration.Scheme = schema
+	client := NewApiClient(newConfiguration)
+
+	request := PayQueryRequest{
+		MchNo:      Pointer("xxxxxxxxxxx"),
+		MchOrderNo: Pointer("xxxxxxxxxxxxxxxxxx"),
+	}
+
+	execute, _, err := client.PayApi.QueryOrder(context.Background(), request)
+
+	if err != nil {
+		t.Log(err)
+		return
+	}
+	if execute.Code != 0 {
+		fmt.Println(execute.Code, execute.Msg)
+	}
 }

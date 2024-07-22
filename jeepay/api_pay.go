@@ -79,7 +79,7 @@ func (p *PayApiService) CloseOrder(ctx _context.Context, query OrderCloseRequest
 	return execute, response, nil
 }
 
-func (p *PayApiService) ChannelOrder(ctx _context.Context, query OrderCloseRequest) (OrderChannelResponse, *_nethttp.Response, error) {
+func (p *PayApiService) ChannelOrder(ctx _context.Context, query OrderChannelRequest) (OrderChannelResponse, *_nethttp.Response, error) {
 	model := Struct2MapName(query)
 	request := ApiRequest{ctx: ctx, ApiService: (*Service)(p), Path: "/api/channelUserId/jump", PayModel: model}
 	return postExecute[OrderChannelResponse](request)
