@@ -22,22 +22,24 @@ type PayCreateRequest struct {
 	SignType     *string  `json:"signType"`     // 签名类型
 }
 type PayQueryItem struct {
-	Amount         *int   `json:"amount"`
-	AppId          string `json:"appId"`
-	Body           string `json:"body"`
-	ChannelOrderNo string `json:"channelOrderNo"`
-	ClientIp       string `json:"clientIp"`
-	CreatedAt      *int64 `json:"createdAt"`
-	Currency       string `json:"currency"`
-	ExtParam       string `json:"extParam"`
-	IfCode         string `json:"ifCode"`
-	MchNo          string `json:"mchNo"`
-	MchOrderNo     string `json:"mchOrderNo"`
-	PayOrderId     string `json:"payOrderId"`
-	State          *int   `json:"state"`
-	Subject        string `json:"subject"`
-	SuccessTime    int64  `json:"successTime"`
-	WayCode        string `json:"wayCode"`
+	Amount         *int    `json:"amount"`
+	AppId          string  `json:"appId"`
+	Body           string  `json:"body"`
+	ChannelOrderNo string  `json:"channelOrderNo"`
+	ClientIp       string  `json:"clientIp"`
+	CreatedAt      *int64  `json:"createdAt"`
+	Currency       string  `json:"currency"`
+	ExtParam       string  `json:"extParam"`
+	IfCode         string  `json:"ifCode"`
+	MchNo          string  `json:"mchNo"`
+	MchOrderNo     string  `json:"mchOrderNo"`
+	PayOrderId     string  `json:"payOrderId"`
+	State          *int    `json:"state"`
+	Subject        string  `json:"subject"`
+	SuccessTime    int64   `json:"successTime"`
+	WayCode        string  `json:"wayCode"`
+	ErrCode        *string `json:"errCode"`
+	ErrMsg         *string `json:"errMsg"`
 }
 
 type BaseResponse struct {
