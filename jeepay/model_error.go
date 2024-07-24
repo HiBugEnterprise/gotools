@@ -1,4 +1,4 @@
-package jeepay_go_sdk
+package jeepay
 
 import (
 	"encoding/json"

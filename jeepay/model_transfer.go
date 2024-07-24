@@ -1,4 +1,4 @@
-package jeepay_go_sdk
+package jeepay
 
 type TransferExecRequest struct {
 	IfCode       string `json:"ifCode"`

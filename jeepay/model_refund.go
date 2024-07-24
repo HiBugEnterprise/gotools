@@ -1,22 +1,22 @@
-package jeepay_go_sdk
+package jeepay
 
 type RefundRequest struct {
-	PayOrderId   string `json:"payOrderId"`
-	ExtParam     string `json:"extParam"`
-	MchOrderNo   string `json:"mchOrderNo"`
-	RefundReason string `json:"refundReason"`
-	Sign         string `json:"sign"`
-	ReqTime      string `json:"reqTime"`
-	Version      string `json:"version"`
-	ChannelExtra string `json:"channelExtra"`
-	AppId        string `json:"appId"`
-	MchRefundNo  string `json:"mchRefundNo"`
-	ClientIp     string `json:"clientIp"`
-	NotifyUrl    string `json:"notifyUrl"`
-	SignType     string `json:"signType"`
-	Currency     string `json:"currency"`
-	MchNo        string `json:"mchNo"`
-	RefundAmount int    `json:"refundAmount"`
+	PayOrderId   *string `json:"payOrderId"`
+	ExtParam     *string `json:"extParam"`
+	MchOrderNo   *string `json:"mchOrderNo"`
+	RefundReason *string `json:"refundReason"`
+	Sign         *string `json:"sign"`
+	ReqTime      *string `json:"reqTime"`
+	Version      *string `json:"version"`
+	ChannelExtra *string `json:"channelExtra"`
+	AppId        *string `json:"appId"`
+	MchRefundNo  *string `json:"mchRefundNo"`
+	ClientIp     *string `json:"clientIp"`
+	NotifyUrl    *string `json:"notifyUrl"`
+	SignType     *string `json:"signType"`
+	Currency     *string `json:"currency"`
+	MchNo        *string `json:"mchNo"`
+	RefundAmount *int    `json:"refundAmount"`
 }
 
 type RefundResponse struct {
@@ -29,13 +29,13 @@ type RefundResponse struct {
 }
 
 type RefundQueryRequest struct {
-	RefundOrderId string `json:"refundOrderId"`
-	AppId         string `json:"appId"`
-	Sign          string `json:"sign"`
-	SignType      string `json:"signType"`
-	ReqTime       string `json:"reqTime"`
-	MchNo         string `json:"mchNo"`
-	Version       string `json:"version"`
+	RefundOrderId *string `json:"refundOrderId"`
+	AppId         *string `json:"appId"`
+	Sign          *string `json:"sign"`
+	SignType      *string `json:"signType"`
+	ReqTime       *string `json:"reqTime"`
+	MchNo         *string `json:"mchNo"`
+	Version       *string `json:"version"`
 }
 
 type RefundQueryResponse struct {

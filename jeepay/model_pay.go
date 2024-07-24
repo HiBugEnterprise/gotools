@@ -1,24 +1,25 @@
-package jeepay_go_sdk
+package jeepay
 
 type PayCreateRequest struct {
-	Amount       *int     `json:"amount"`
-	AppId        *string  `json:"appId"`
-	Body         *string  `json:"body"`
-	ClientIp     *string  `json:"clientIp"`
-	Currency     *string  `json:"currency"`
-	ExtParam     *string  `json:"extParam"`
-	MchOrderNo   *string  `json:"mchOrderNo"`
-	MchNo        *string  `json:"mchNo"`
-	Subject      *string  `json:"subject"`
-	WayCode      *WayCode `json:"wayCode"`
-	Sign         *string  `json:"sign"`
-	ReqTime      *int64   `json:"reqTime"`
-	Version      *string  `json:"version"`
-	ChannelExtra *string  `json:"channelExtra"`
-	NotifyUrl    *string  `json:"notifyUrl"`
-	SignType     *string  `json:"signType"`
-	ReturnUrl    *string  `json:"returnUrl"`
-	DivisionMode *int     `json:"divisionMode"`
+	MchNo        *string  `json:"mchNo"`        // 商户号
+	AppId        *string  `json:"appId"`        // 应用ID
+	MchOrderNo   *string  `json:"mchOrderNo"`   // 商户订单号
+	WayCode      *WayCode `json:"wayCode"`      // 支付方式
+	Amount       *int     `json:"amount"`       // 支付金额
+	Currency     *string  `json:"currency"`     // 货币代码
+	ClientIp     *string  `json:"clientIp"`     // 客户端IPV4地址
+	Subject      *string  `json:"subject"`      // 商品标题
+	Body         *string  `json:"body"`         // 商品描述
+	NotifyUrl    *string  `json:"notifyUrl"`    // 异步通知地址
+	ReturnUrl    *string  `json:"returnUrl"`    // 跳转通知地址
+	ExpiredTime  *int     `json:"expiredTime"`  // 失效时间
+	ChannelExtra *string  `json:"channelExtra"` // 渠道参数
+	DivisionMode *int     `json:"divisionMode"` // 分账模式
+	ExtParam     *string  `json:"extParam"`     // 扩展参数
+	ReqTime      *int64   `json:"reqTime"`      // 请求时间
+	Version      *string  `json:"version"`      // 接口版本
+	Sign         *string  `json:"sign"`         // 签名值
+	SignType     *string  `json:"signType"`     // 签名类型
 }
 type PayQueryItem struct {
 	Amount         *int   `json:"amount"`
@@ -62,13 +63,14 @@ type PayChannelExtra struct {
 }
 
 type PayQueryRequest struct {
-	AppId      *string `json:"appId"`
-	MchOrderNo *string `json:"mchOrderNo"`
-	MchNo      *string `json:"mchNo"`
-	Sign       *string `json:"sign"`
-	ReqTime    *int64  `json:"reqTime"`
-	Version    *string `json:"version"`
-	SignType   *string `json:"signType"`
+	MchNo      *string `json:"mchNo"`      // 商户号
+	AppId      *string `json:"appId"`      // 应用ID
+	PayOrderId *string `json:"payOrderId"` // 支付中心生成的订单号，与mchOrderNo二者传一即可
+	MchOrderNo *string `json:"mchOrderNo"` // 商户生成的订单号，与payOrderId二者传一即可
+	ReqTime    *int64  `json:"reqTime"`    // 请求接口时间，13位时间戳
+	Version    *string `json:"version"`    // 接口版本号，固定：1.0
+	Sign       *string `json:"sign"`       // 签名值
+	SignType   *string `json:"signType"`   // 签名类型，目前只支持MD5方式
 }
 
 func NewPayModel() *PayCreateRequest {
@@ -77,14 +79,14 @@ func NewPayModel() *PayCreateRequest {
 }
 
 type OrderCloseRequest struct {
-	// 商户生成的订单
-	MchOrderNo string `json:"mchOrderNo"`
-	AppId      string `json:"appId"`
-	Sign       string `json:"sign"`
-	SignType   string `json:"signType"`
-	ReqTime    string `json:"reqTime"`
-	MchNo      string `json:"mchNo"`
-	Version    string `json:"version"`
+	MchNo      *string `json:"mchNo"`      // 商户号
+	AppId      *string `json:"appId"`      // 应用ID
+	PayOrderId *string `json:"payOrderId"` // 支付中心生成的订单号，与mchOrderNo二者传一即可
+	MchOrderNo *string `json:"mchOrderNo"` // 商户生成的订单号，与payOrderId二者传一即可
+	ReqTime    *int64  `json:"reqTime"`    // 请求接口时间，13位时间戳
+	Version    *string `json:"version"`    // 接口版本号，固定：1.0
+	Sign       *string `json:"sign"`       // 签名值
+	SignType   *string `json:"signType"`   // 签名类型，目前只支持MD5方式
 }
 
 type OrderNotifyRequest struct {
@@ -106,14 +108,22 @@ type OrderNotifyRequest struct {
 }
 
 type OrderChannelRequest struct {
-	MchNo       string `json:"mchNo"`
-	AppId       string `json:"appId"`
-	IfCode      string `json:"ifCode"`
-	RedirectUrl string `json:"redirectUrl"`
-	Sign        string `json:"sign"`
-	SignType    string `json:"signType"`
-	ReqTime     string `json:"reqTime"`
-	Version     string `json:"version"`
+	// 商户号
+	MchNo *string `json:"mchNo"`
+	// 应用ID
+	AppId *string `json:"appId"`
+	// 支付接口，目前只支持传 AUTO
+	IfCode *string `json:"ifCode"`
+	// 跳转地址，获取到用户ID后，会携带用户ID参数跳转到该地址
+	RedirectUrl *string `json:"redirectUrl"`
+	// 请求接口时间，13位时间戳
+	ReqTime *int64 `json:"reqTime"`
+	// 接口版本号，固定：1.0
+	Version *string `json:"version"`
+	// 签名值
+	Sign *string `json:"sign"`
+	// 签名类型，目前只支持MD5方式
+	SignType *string `json:"signType"`
 }
 
 type OrderChannelResponse struct {

@@ -1,4 +1,4 @@
-package jeepay_go_sdk
+package jeepay
 
 import (
 	"context"
@@ -72,8 +72,8 @@ func TestCloseOrder(t *testing.T) {
 	cli := client()
 
 	request := OrderCloseRequest{
-		MchNo:      "XXXXXXXXXXXX",
-		MchOrderNo: "xxxxxxxxx",
+		MchNo:      Pointer("XXXXXXXXXXXX"),
+		MchOrderNo: Pointer("xxxxxxxxx"),
 	}
 	execute, _, err := cli.PayApi.CloseOrder(context.Background(), request)
 	if err != nil {

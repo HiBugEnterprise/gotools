@@ -1,4 +1,4 @@
-package jeepay_go_sdk
+package jeepay
 
 type DivisionBindRequest struct {
 	Version          string `json:"version"`
