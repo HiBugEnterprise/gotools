@@ -120,6 +120,6 @@ type Content struct {
 }
 
 type ImgChatMsg struct {
-	Role    string     `json:"role"`
-	Content []*Content `json:"content"`
+	Role    string      `json:"role"`
+	Content interface{} `json:"content"`
 }
