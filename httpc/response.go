@@ -66,3 +66,37 @@ func JwtUnauthorizedResult(w http.ResponseWriter, r *http.Request, err error) {
 
 	httpx.WriteJson(w, http.StatusUnauthorized, &Response{http.StatusUnauthorized, "Auth failed", nil})
 }
+
+func CustomHTTPResp(httpCode int, w http.ResponseWriter, r *http.Request, err error) {
+	var (
+		code      = http.StatusInternalServerError
+		res       = Response{Code: code, Msg: errorx.CodeInternalErr.Msg()}
+		metadata  any
+		bizType   string
+		errDetail string
+	)
+
+	var customErr *errorx.Error
+	switch {
+	case errors.As(err, &customErr):
+		res.Code = customErr.Code
+		errDetail = customErr.Msg
+		if customErr.IsShow {
+			res.Msg = customErr.Msg
+		}
+		code = customErr.Code
+		bizType = customErr.BizType
+		metadata = customErr.Metadata
+	}
+
+	logc.Errorw(r.Context(), errDetail,
+		logc.Field("err", err),
+		logc.Field("code", code),
+		logc.Field("type", bizType),
+		logc.Field("metadata", metadata),
+		logc.Field("method", r.Method),
+		logc.Field("path", r.URL.Path),
+	)
+
+	httpx.WriteJson(w, httpCode, &Response{code, errDetail, nil})
+}
