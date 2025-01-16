@@ -98,5 +98,9 @@ func CustomHTTPResp(httpCode int, w http.ResponseWriter, r *http.Request, err er
 		logc.Field("path", r.URL.Path),
 	)
 
+	if httpCode == 0 {
+		httpCode = http.StatusOK
+	}
+
 	httpx.WriteJson(w, httpCode, &Response{code, errDetail, nil})
 }
