@@ -2,7 +2,7 @@ package jeepay
 
 import (
 	_context "context"
-	"errors"
+	"github.com/pkg/errors"
 	_nethttp "net/http"
 )
 
@@ -56,6 +56,19 @@ func (p *PayApiService) NotificationOrder(ctx _context.Context, query OrderNotif
 	model := Struct2MapName(query)
 	request := ApiRequest{ctx: ctx, ApiService: (*Service)(p), Path: path, PayModel: model}
 	return postExecute[OrderNotifyResponse](request)
+}
+
+func (p *PayApiService) CheckSign(ctx _context.Context, req OrderNotifyCheckSignRequest, sign string) error {
+	// 对data内数据签名,如data为空则不返回，sign不为空说明data不为空
+	equal, err := checkSign(req, p.Configuration.AppSecret, "MD5", sign)
+	if err != nil {
+		return errors.Wrap(err, "验签失败")
+	}
+	if !equal {
+		return errors.New("返回结果验证签名失败")
+	}
+
+	return nil
 }
 
 func (p *PayApiService) CloseOrder(ctx _context.Context, query OrderCloseRequest) (Response[BaseResponse], *_nethttp.Response, error) {

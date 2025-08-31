@@ -156,3 +156,25 @@ type OrderNotifyResponse struct {
 	WayCode    string `json:"wayCode"`
 	Sign       string `json:"sign"`
 }
+
+type OrderNotifyCheckSignRequest struct {
+	PayOrderId     string `form:"payOrderId,optional,omitempty"`     // 支付订单号
+	MchNo          string `form:"mchNo,optional,omitempty"`          // 商户号
+	AppId          string `form:"appId,optional,omitempty"`          // 应用ID
+	MchOrderNo     string `form:"mchOrderNo,optional,omitempty"`     // 商户订单号
+	IfCode         string `form:"ifCode,optional,omitempty"`         // 支付接口编码
+	WayCode        string `form:"wayCode,optional,omitempty"`        // 支付方式
+	Amount         int    `form:"amount,optional,omitempty"`         // 支付金额, 单位分
+	Currency       string `form:"currency,optional,omitempty"`       // 货币代码
+	State          int    `form:"state,optional,omitempty"`          // 支付订单状态
+	ClientIp       string `form:"clientIp,optional,omitempty"`       // 客户端IPV4地址, 可选
+	Subject        string `form:"subject,optional,omitempty"`        // 商品标题
+	Body           string `form:"body,optional,omitempty"`           // 商品描述
+	ChannelOrderNo string `form:"channelOrderNo,optional,omitempty"` // 对应渠道的订单号, 可选
+	ErrCode        string `form:"errCode,optional,omitempty"`        // 渠道下单返回错误码, 可选
+	ErrMsg         string `form:"errMsg,optional,omitempty"`         // 渠道下单返回错误描述, 可选
+	ExtParam       string `form:"extParam,optional,omitempty"`       // 商户扩展参数, 可选
+	CreatedAt      int64  `form:"createdAt,optional,omitempty"`      // 订单创建时间, 13位时间戳
+	SuccessTime    int64  `form:"successTime,optional,omitempty"`    // 订单支付成功时间, 13位时间戳, 可选
+	ReqTime        int64  `form:"reqTime,optional,omitempty"`        // 通知请求时间, 13位时间戳
+}
